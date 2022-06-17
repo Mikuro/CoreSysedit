@@ -1,0 +1,50 @@
+<FlowDiagram xmlns="clr-namespace:tanks.Models;assembly=tanks.Models" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Height="550.0" Width="800.0">
+                            <FlowDiagram.Components>
+                                <Component Higa="-7.96256817" Higb="0.0299271972" Higc="-5.02134635E-6" Higd="9.20414106E-9" Hige="-4.72088923E-12" Higf="8.56099179E-16" Id="AIR" Mw="28.951" Omega="0.0" Pc="3.774" Tc="-140.7" ZRA="0.2962" Zc="0.313"/>
+                                <Component Higa="-9.08739848" Higb="0.0334759979" Higc="-2.63024106E-6" Higd="7.62781326E-9" Hige="-2.93966287E-12" Higf="3.84355046E-16" Id="WATER" Mw="18.015" Omega="0.34486" Pc="22.055" Tc="373.98" ZRA="0.2338" Zc="0.229"/>
+                            </FlowDiagram.Components>
+                            <FlowDiagram.Systems>
+                                <CalculationSystem>
+                                    <CalculationSystem.SRKKIJ>
+                                        <x:Array Type="sys:Double">
+                                            <sys:Double>0.0</sys:Double>
+                                        </x:Array>
+                                    </CalculationSystem.SRKKIJ>
+                                </CalculationSystem>
+                            </FlowDiagram.Systems>
+                            <FlowDiagram.Items>
+                                <PressureFeed Id="c1002" P="101.325" T="20.0" X="62.39999999999998" Y="200.93333333333334">
+                                    <PressureFeed.x>
+                                        <sys:Double>0.0</sys:Double>
+                                        <sys:Double>1.0</sys:Double>
+                                    </PressureFeed.x>
+                                </PressureFeed>
+                                <PressureProduct Id="c1003" P="791.325" X="678.3999999999999" Y="188.59999999999997"/>
+                                <ControlValve CV="1000.0" Cff="1.0" Id="c1000" R="50.0" X="143.79999999999995" Y="186.39999999999998" mv="0.5" pos="0.5" pos0="0.002" tclose="5.0" tlag="3.0" topen="5.0"/>
+                                <ControlValve CV="1000.0" Cff="1.0" Id="c1001" R="50.0" X="558.1999999999998" Y="173.59999999999997" mv="0.5" pos="0.5" pos0="0.002" tclose="5.0" tlag="3.0" topen="5.0"/>
+                                <ControlValve CV="1000.0" Cff="1.0" Id="c1004" R="50.0" X="347.79999999999995" Y="57.4666666666667" mv="0.0" pos="0.0" pos0="0.002" tclose="5.0" tlag="3.0" topen="5.0"/>
+                                <Splitter Id="c1005" X="468.59999999999985" Y="169.66666666666663"/>
+                                <Pump Hd="60.0" Hs="70.0" Id="c1006" Vd="50.0" Wd="10.4" Ws="0.4" X="359.26666666666665" Y="193.2" dd="1015.0" mv="1" pos="1" tlag="3.0"/>
+                                <Mixer Id="c1007" X="261.3999999999999" Y="182.39999999999998"/>
+                                <FlowMeter Fmax="2000.0" Fmin="0.0" Id="i1001" X="390.99999999999994" Y="256.46666666666664" t_unit="h" unit="m3"/>
+                                <FlowMeter Fmax="2000.0" Fmin="0.0" Id="i1000" X="171.46666666666673" Y="64.39999999999999" t_unit="h" unit="m3"/>
+                                <FlowMeter Fmax="2000.0" Fmin="0.0" Id="i1002" X="573.4666666666666" Y="60.80000000000001" t_unit="h" unit="m3"/>
+                                <PressureGauge Id="i1003" Ph="300.0" Pl="0.0" X="167.53333333333333" Y="255.79999999999998" unit="kPaG"/>
+                                <PressureGauge Id="i1004" Ph="300.0" Pl="0.0" X="586.4666666666666" Y="256.4" unit="kPaG"/>
+                            </FlowDiagram.Items>
+                            <FlowDiagram.Links>
+                                <Stream Figures="M 117.39999999999998,210.93333333333334 L 142.79999999999995,211.39999999999998" From="c1002.p1" Id="s1000" To="c1000.f1" Type="Liquid"/>
+                                <Stream Figures="M 222.79999999999995,211.39999999999998 L 260.3999999999999,211.39999999999998" From="c1000.p1" Id="s1001" To="c1007.f2" Type="Liquid"/>
+                                <Stream Figures="M 320.3999999999999,211.39999999999998 L 358.26666666666665,211.2" From="c1007.p1" Id="s1002" To="c1006.f1" Type="Liquid"/>
+                                <Stream Figures="M 438.26666666666665,199.2 L 467.59999999999985,198.66666666666663" From="c1006.p1" Id="s1003" To="c1005.f1" Type="Liquid"/>
+                                <Stream Figures="M 527.5999999999999,198.66666666666663 L 557.1999999999998,198.59999999999997" From="c1005.p2" Id="s1004" To="c1001.f1" Type="Liquid"/>
+                                <Stream Figures="M 637.1999999999998,198.59999999999997 L 677.3999999999999,198.59999999999997" From="c1001.p1" Id="s1005" To="c1003.f1" Type="Liquid"/>
+                                <Stream Figures="M 497.59999999999985,168.66666666666663 L 497.59999999999985,23.2 L 303.2,23.2 L 303.2,82.4666666666667 L 346.79999999999995,82.4666666666667" From="c1005.p1" Id="s1006" To="c1004.f1" Type="Liquid"/>
+                                <Stream Figures="M 426.79999999999995,82.4666666666667 L 457.59999999999997,82.4666666666667 L 457.59999999999997,130.39999999999998 L 290.3999999999999,130.39999999999998 L 290.3999999999999,181.39999999999998" From="c1004.p1" Id="s1007" To="c1007.f1" Type="Liquid"/>
+                                <Signal Figures="M 339.2,211.39999999999998 L 339.2,292.46666666666664 L 397.99999999999994,292.46666666666664" From="s1002" Id="w1001" To="i1001.m1"/>
+                                <Signal Figures="M 230.40000000000003,211.39999999999998 L 230.40000000000003,100.39999999999999 L 188.46666666666673,100.39999999999999" From="s1001" Id="w1000" To="i1000.m1"/>
+                                <Signal Figures="M 497.59999999999985,96.80000000000001 L 580.4666666666666,96.80000000000001" From="s1006" Id="w1002" To="i1002.m1"/>
+                                <Signal Figures="M 247.2,211.39999999999998 L 247.2,291.79999999999995 L 184.53333333333333,291.79999999999995" From="s1001" Id="w1003" To="i1003.m"/>
+                                <Signal Figures="M 540.0,198.66666666666663 L 540.0,292.4 L 593.4666666666666,292.4" From="s1004" Id="w1004" To="i1004.m"/>
+                            </FlowDiagram.Links>
+                        </FlowDiagram>

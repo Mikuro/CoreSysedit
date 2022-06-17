@@ -1,0 +1,180 @@
+﻿<FlowDiagram xmlns="clr-namespace:tanks.Models;assembly=tanks.Models" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" Width="690" Height="500">
+  <FlowDiagram.Components>
+    <Component Id="AIR" Mw="28.951" Tc="-140.7" Pc="3.774" Zc="0.313" Omega="0" Higa="-7.96256817" Higb="0.0299271972" Higc="-5.02134635E-06" Higd="9.20414106E-09" Hige="-4.72088923E-12" Higf="8.56099179E-16" ZRA="0.2962" />
+    <Component Id="WATER" Mw="18.015" Tc="373.98" Pc="22.055" Zc="0.229" Omega="0.34486" Higa="-9.08739848" Higb="0.0334759979" Higc="-2.63024106E-06" Higd="7.62781326E-09" Hige="-2.93966287E-12" Higf="3.84355046E-16" ZRA="0.2338" />
+  </FlowDiagram.Components>
+  <FlowDiagram.Items>
+    <PressureFeed P="401.325" T="20" X="32" Y="62.19" Id="c1000">
+      <PressureFeed.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>1</sys:Double>
+      </PressureFeed.x>
+    </PressureFeed>
+    <Splitter X="229.75" Y="43.19" Id="c1002" />
+    <ControlValve CV="1000" R="50" pos0="0.002" topen="5" tclose="5" tlag="3" Cff="1" mv="0.5" pos="0.5" velosity="0" X="499.2" Y="47.19" Id="c1003" />
+    <PressureProduct P="101.325" X="617.88" Y="62.19" Id="c1004" />
+    <PressureFeed P="401.325" T="20" X="28.53" Y="249.38" Id="c1005">
+      <PressureFeed.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>1</sys:Double>
+      </PressureFeed.x>
+    </PressureFeed>
+    <ControlValve CV="1000" R="50" pos0="0.002" topen="5" tclose="5" tlag="3" Cff="1" mv="0.1" pos="0.1" velosity="0" X="304.27" Y="137.78" Id="c1006" />
+    <ControlValve CV="1000" R="50" pos0="0.002" topen="5" tclose="5" tlag="3" Cff="1" mv="0.6" pos="0.6" velosity="0" X="112.94" Y="234.38" Id="c1011" />
+    <Mixer X="412.2" Y="230.38" Id="c1012" />
+    <ControlValve CV="1000" R="50" pos0="0.002" topen="5" tclose="5" tlag="3" Cff="1" mv="0.5" pos="0.5" velosity="0" X="496.81" Y="234.38" Id="c1013" />
+    <PressureProduct P="101.325" X="615.47" Y="249.38" Id="c1014" />
+    <ControlValve CV="1000" R="50" pos0="0.002" topen="5" tclose="5" tlag="3" Cff="1" mv="0.5" pos="0.5" velosity="0" X="115.38" Y="47.19" Id="c1001" />
+  </FlowDiagram.Items>
+  <FlowDiagram.Links>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1000" From="c1000.p1" To="c1001.f1" Figures="M 80.0,72.19 L 121.38,72.19">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1001" From="c1005.p1" To="c1011.f1" Figures="M 76.53,259.38 L 118.94,259.38">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1002" From="c1001.p1" To="c1002.f1" Figures="M 187.38,72.19 L 235.75,72.19">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1003" From="c1002.p2" To="c1003.f1" Figures="M 281.75,72.19 L 505.20000000000005,72.19">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1004" From="c1002.p3" To="c1006.f1" Figures="M 258.75,95.19 L 258.75,162.78 L 310.27,162.78">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1005" From="c1011.p1" To="c1012.f2" Figures="M 184.94,259.38 L 418.2,259.38">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1006" From="c1012.p1" To="c1013.f1" Figures="M 464.2,259.38 L 502.80999999999995,259.38">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1007" From="c1003.p1" To="c1004.f1" Figures="M 571.2,72.19 L 623.88,72.19">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1008" From="c1006.p1" To="c1012.f1" Figures="M 376.27,162.78 L 441.2,162.78 L 441.2,236.38">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s1009" From="c1013.p1" To="c1014.f1" Figures="M 568.81,259.38 L 621.47,259.38">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+  </FlowDiagram.Links>
+  <FlowDiagram.Systems>
+    <CalculationSystem>
+      <CalculationSystem.SRKKIJ>
+        <x:Array Type="sys:Double">
+          <sys:Double>0</sys:Double>
+        </x:Array>
+      </CalculationSystem.SRKKIJ>
+    </CalculationSystem>
+  </FlowDiagram.Systems>
+</FlowDiagram>

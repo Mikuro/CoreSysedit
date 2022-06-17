@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="doc1.xml" />
+    <None Remove="doc11.xml" />
+    <None Remove="doc2.xml" />
+    <None Remove="doc3.xml" />
+    <None Remove="doc4.xml" />
+    <None Remove="doc5.xml" />
+    <None Remove="doc6.xml" />
+    <None Remove="doc6a.xml" />
+    <None Remove="doc7.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="doc1.xml" />
+    <EmbeddedResource Include="doc11.xml" />
+    <EmbeddedResource Include="doc2.xml" />
+    <EmbeddedResource Include="doc3.xml" />
+    <EmbeddedResource Include="doc4.xml" />
+    <EmbeddedResource Include="doc5.xml" />
+    <EmbeddedResource Include="doc6.xml" />
+    <EmbeddedResource Include="doc6a.xml" />
+    <EmbeddedResource Include="doc7.xml" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,125 @@
+﻿<FlowDiagram xmlns="clr-namespace:tanks.Models;assembly=tanks.Models" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" Width="800" Height="400">
+  <FlowDiagram.Components>
+    <Component Id="ETHANE" Mw="30.07" Tc="32.17" Pc="4.872" Zc="0.279" Omega="0.09949" Higa="-8.38900273" Higb="0.0118838227" Higc="6.88666959E-05" Higd="3.81411539E-09" Hige="-1.41107489E-11" Higf="3.64938594E-15" ZRA="0.28128" />
+    <Component Id="PROPANE" Mw="44.097" Tc="96.68" Pc="4.248" Zc="0.276" Omega="0.15229" Higa="-9.66553264" Higb="-0.00104077899" Higc="0.000145945969" Higd="-4.80681561E-08" Hige="7.29166432E-12" Higf="-2.00533608E-16" ZRA="0.27664" />
+    <Component Id="ISOBUTANE" Mw="58.123" Tc="134.65" Pc="3.64" Zc="0.278" Omega="0.18352" Higa="-11.7026535" Higb="-0.00975642624" Higc="0.000215168731" Higd="-8.83835323E-08" Hige="2.12953341E-11" Higf="-2.37296696E-15" ZRA="0.27569" />
+    <Component Id="nBUTANE" Mw="58.123" Tc="151.97" Pc="3.796" Zc="0.274" Omega="0.20016" Higa="-13.4636183" Higb="0.00241504996" Higc="0.00018762064" Higd="-6.07309839E-08" Hige="7.65853251E-12" Higf="3.03431042E-16" ZRA="0.27331" />
+    <Component Id="ISOPENTANE" Mw="72.15" Tc="187.25" Pc="3.38" Zc="0.27" Omega="0.22788" Higa="-14.6503964" Higb="-0.0099449694" Higc="0.000259900395" Higd="-1.07415898E-07" Hige="3.09186333E-11" Higf="-4.95017075E-15" ZRA="0.27167" />
+    <Component Id="WATER" Mw="18.015" Tc="373.98" Pc="22.055" Zc="0.229" Omega="0.34486" Higa="-9.08739848" Higb="0.0334759979" Higc="-2.63024106E-06" Higd="7.62781326E-09" Hige="-2.93966287E-12" Higf="3.84355046E-16" ZRA="0.2338" />
+    <Component Id="NITROGEN" Mw="28.014" Tc="-146.95" Pc="3.4" Zc="0.289" Omega="0.03772" Higa="-7.99721259" Higb="0.0299258309" Higc="-3.96218694E-06" Higd="6.50201843E-09" Hige="-2.58173584E-12" Higf="2.99564819E-16" ZRA="0.28971" />
+  </FlowDiagram.Components>
+  <FlowDiagram.Items>
+    <PressureFeed P="2700.06" T="87.8" X="80" Y="145" Id="c2001">
+      <PressureFeed.x>
+        <sys:Double>0.0019</sys:Double>
+        <sys:Double>0.64829</sys:Double>
+        <sys:Double>0.05703</sys:Double>
+        <sys:Double>0.29151</sys:Double>
+        <sys:Double>0.00127</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </PressureFeed.x>
+    </PressureFeed>
+    <ControlValve CV="128" R="300" pos0="0.002" topen="0" tclose="0" tlag="3" Cff="1" mv="0.554925" pos="0.554925" velosity="0" X="180" Y="130" Id="c2002" />
+    <PressureProduct P="1808.21" X="300" Y="145" Id="c2003" />
+  </FlowDiagram.Items>
+  <FlowDiagram.Links>
+    <Stream Type="Liquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s2001" From="c2001.p1" To="c2002.f1" Figures="M 135,155 L 180,155">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+    <Stream Type="VaporAndLiquid" F="0" P="0" T="0" RL="0" HL="0" RV="0" HV="0" Mw="0" V="0" Id="s2002" From="c2002.p1" To="c2003.f1" Figures="M 255,155 L 300,155">
+      <Stream.x>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.x>
+      <Stream.XL>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XL>
+      <Stream.XV>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+        <sys:Double>0</sys:Double>
+      </Stream.XV>
+    </Stream>
+  </FlowDiagram.Links>
+  <FlowDiagram.Systems>
+    <CalculationSystem>
+      <CalculationSystem.SRKKIJ>
+        <x:Array Type="sys:Double">
+          <sys:Double>-0.0022</sys:Double>
+          <sys:Double>-0.01</sys:Double>
+          <sys:Double>0.0067</sys:Double>
+          <sys:Double>0</sys:Double>
+          <sys:Double>0</sys:Double>
+          <sys:Double>0.0407</sys:Double>
+        </x:Array>
+        <x:Array Type="sys:Double">
+          <sys:Double>-0.01</sys:Double>
+          <sys:Double>0</sys:Double>
+          <sys:Double>0.0078</sys:Double>
+          <sys:Double>0</sys:Double>
+          <sys:Double>0.0763</sys:Double>
+        </x:Array>
+        <x:Array Type="sys:Double">
+          <sys:Double>0.0011</sys:Double>
+          <sys:Double>0</sys:Double>
+          <sys:Double>0</sys:Double>
+          <sys:Double>0.0944</sys:Double>
+        </x:Array>
+        <x:Array Type="sys:Double">
+          <sys:Double>0</sys:Double>
+          <sys:Double>0</sys:Double>
+          <sys:Double>0.0867</sys:Double>
+        </x:Array>
+        <x:Array Type="sys:Double">
+          <sys:Double>0</sys:Double>
+          <sys:Double>0</sys:Double>
+        </x:Array>
+        <x:Array Type="sys:Double">
+          <sys:Double>0</sys:Double>
+        </x:Array>
+      </CalculationSystem.SRKKIJ>
+    </CalculationSystem>
+  </FlowDiagram.Systems>
+</FlowDiagram>
