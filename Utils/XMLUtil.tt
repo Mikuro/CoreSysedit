@@ -1,0 +1,553 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Reflection.dll" #>
+<#@ assembly name="System.Runtime.dll" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Collections.ObjectModel" #>
+<#@ assembly name="$(ProjectDir)..\Models\bin\$(Configuration)\net462\tanks.Models.dll" #>
+<#@ import namespace="tanks.Models" #>
+<#@ output extension=".cs" #>
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Xml;
+using System.Xml.Linq;
+
+namespace tanks.Models
+{
+	public static class XMLUtil
+	{
+        static public void SerializeFlowDiagram(System.IO.Stream stream, Models.FlowDiagram obj)
+        {
+            XNamespace defns = "clr-namespace:tanks.Models;assembly=tanks.Models";
+            XNamespace xns = "http://schemas.microsoft.com/winfx/2006/xaml";
+            XNamespace sysns = "clr-namespace:System;assembly=mscorlib";
+
+            var node = XMLUtil.FlowDiagram_to_node(obj, new XNamespace[3] { defns, xns, sysns });
+
+            var doc = new XDocument(node);
+
+            doc.Save(stream);
+        }
+
+        static public Models.FlowDiagram DeserializeFlowDiagram(System.IO.Stream stream)
+        {
+            XmlDocument file = new XmlDocument();
+
+            file.Load(stream);
+
+            if (file.ChildNodes[0].NodeType == XmlNodeType.XmlDeclaration)
+            {
+                if(file.ChildNodes.Count != 2)
+                    throw new Exception("fail");
+
+                return XMLUtil.CreateFromFlowDiagram_node(file.ChildNodes[1]);
+            }
+            else
+            {
+                if(file.ChildNodes.Count != 1)
+                    throw new Exception("fail");
+
+                return XMLUtil.CreateFromFlowDiagram_node(file.ChildNodes[0]);
+            }
+        }
+
+        private static XElement double_array_to_node(Double[] arr, XNamespace[] nss)
+        {
+            XElement elem = new XElement(nss[1] + "Array");
+
+            elem.Add(new XAttribute("Type", "sys:Double"));
+            for(int i=0; i<arr.Length; i++)
+            {
+                XElement internalElem = new XElement(nss[2] + "Double");
+                internalElem.Add(new XText(arr[i].ToString(CultureInfo.InvariantCulture)));
+                elem.Add(internalElem);
+            }
+
+            return elem;
+        }
+
+        private static IReadOnlyList<XElement> Collection_double_array_to_node(Collection<Double[]> arr, XNamespace[] nss)
+        {
+            var list = new List<XElement>();
+
+            for (int i = 0; i < arr.Count; i++)
+                list.Add(double_array_to_node(arr[i],nss));
+
+            return list;
+        }
+
+        private static IReadOnlyList<XElement> Collection_double_to_node(Collection<double> arr, XNamespace[] nss)
+        {
+            if (arr == null) return null;
+            var list = new List<XElement>();
+
+            for (int i = 0; i < arr.Count; i++)
+            {
+                XElement internalElem = new XElement(nss[2] + "Double");
+                internalElem.Add(new XText(arr[i].ToString(CultureInfo.InvariantCulture)));
+                list.Add(internalElem);
+            }
+
+            return list;
+        }
+
+        private static IReadOnlyList<XElement> Collection_Component_to_node(Collection<tanks.Models.Component> arr, XNamespace[] nss)
+        {
+            var list = new List<XElement>();
+
+            for(int i=0; i<arr.Count; i++)
+                list.Add(Component_to_node(arr[i], nss));
+
+            return list;
+        }
+
+
+        private static IReadOnlyList<XElement> Collection_CalculationSystem_to_node(Collection<tanks.Models.CalculationSystem> arr, XNamespace[] nss)
+        {
+            var list = new List<XElement>();
+
+            for(int i=0; i<arr.Count; i++)
+                list.Add(CalculationSystem_to_node(arr[i],nss));
+
+            return list;
+        }
+
+        private static IReadOnlyList<XElement> Collection_ModelLink_to_node(Collection<tanks.Models.ModelLink> arr, XNamespace[] nss)
+        {
+            var list = new List<XElement>();
+
+            for(int i=0; i<arr.Count; i++)
+            {
+                XElement link;
+
+                switch(arr[i].GetType().Name)
+                {
+<#
+    var ass4 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass4.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType != typeof(ModelLink)) continue;
+#>
+                case "<#= tp.Name #>":
+                    link = <#= tp.Name #>_to_node(arr[i] as Models.<#= tp.Name #>,nss);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+                list.Add(link);
+            }
+
+            return list;
+        }
+
+        private static IReadOnlyList<XElement> Collection_ModelObject_to_node(Collection<tanks.Models.ModelObject> arr, XNamespace[] nss)
+        {
+            var list = new List<XElement>();
+
+            for(int i=0; i<arr.Count; i++)
+            {
+                XElement obj;
+
+                switch(arr[i].GetType().Name)
+                {
+<#
+    var ass5 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass5.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType.BaseType != typeof(ModelObject)) continue;
+#>
+                case "<#= tp.Name #>":
+                    obj = <#= tp.Name #>_to_node(arr[i] as <#= tp.Name #>,nss);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+                list.Add(obj);
+            }
+
+            return list;
+        }
+
+<#
+    var ass3 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass3.GetTypes())
+    {
+        var attr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (attr == null) continue;
+
+#>
+		private static XElement <#= tp.Name #>_to_node(tanks.Models.<#= tp.Name #> obj, XNamespace[] nss)
+		{
+			return new XElement(nss[0] + "<#= tp.Name #>"
+<#
+        if(tp.Name=="FlowDiagram")
+        {
+#>
+                ,new XAttribute("xmlns", nss[0])
+                ,new XAttribute(XNamespace.Xmlns + "x", nss[1])
+                ,new XAttribute(XNamespace.Xmlns + "sys", nss[2])
+<#
+        }
+        foreach (var py in tp.GetProperties())
+        {
+            var pattr = py.GetCustomAttribute<PropertyTypeAttribute>();
+            if (pattr == null) continue;
+
+            if (py.PropertyType.Name=="Double")
+            {
+#>
+                ,new XAttribute("<#= py.Name #>", obj.<#= py.Name #>.ToString(CultureInfo.InvariantCulture))
+<#
+            }
+            else
+            if (py.PropertyType.Name=="String")
+            {
+#>
+                ,new XAttribute("<#= py.Name #>", obj.<#= py.Name #>)
+<#
+            }
+            else
+            if (py.PropertyType.IsEnum)
+            {
+#>
+                ,new XAttribute("<#= py.Name #>", obj.<#= py.Name #>.ToString())
+<#
+            }
+            else
+            {
+                if (py.PropertyType == typeof(Collection<tanks.Models.Component>))
+                {
+#>
+                ,new XElement(nss[0]+"<#= tp.Name #>.<#= py.Name #>", Collection_Component_to_node(obj.<#= py.Name #>,nss))
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelObject>))
+                {
+#>
+                ,new XElement(nss[0]+"<#= tp.Name #>.<#= py.Name #>", Collection_ModelObject_to_node(obj.<#= py.Name #>,nss))
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelLink>))
+                {
+#>
+                ,new XElement(nss[0]+"<#= tp.Name #>.<#= py.Name #>", Collection_ModelLink_to_node(obj.<#= py.Name #>,nss))
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<double>))
+                {
+#>
+                ,new XElement(nss[0]+"<#= tp.Name #>.<#= py.Name #>", Collection_double_to_node(obj.<#= py.Name #>,nss))
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<Double[]>))
+                {
+#>
+                ,new XElement(nss[0]+"<#= tp.Name #>.<#= py.Name #>", Collection_double_array_to_node(obj.<#= py.Name #>,nss))
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<tanks.Models.CalculationSystem>))
+                {
+#>
+                ,new XElement(nss[0]+"<#= tp.Name #>.<#= py.Name #>", Collection_CalculationSystem_to_node(obj.<#= py.Name #>,nss))
+<#
+                }else
+                {
+#>
+                    //throw new Exception("fail");
+<#
+                }
+            }
+        }
+#>
+			);
+		}
+<#
+    }
+#>
+// ---------------------------------
+        private static Double[] CreateFrom_double_array_node(XmlNode node)
+        {
+            var dst = new Double[node.ChildNodes.Count];
+
+            for (int i = 0; i < dst.Length; i++)
+                dst[i] = Double.Parse(XValue(node.ChildNodes[i]), CultureInfo.InvariantCulture);
+
+            return dst;
+        }
+
+        private static Collection<Double[]> CreateFromCollection_double_array_node(XmlNode node)
+        {
+            var dst = new Collection<Double[]>();
+
+            for(int i=0; i<node.ChildNodes.Count; i++)
+                dst.Add(CreateFrom_double_array_node(node.ChildNodes[i]));
+
+            return dst;
+        }
+
+        private static string XValue(XmlNode node)
+        {
+            string retstring;
+
+            if(node.Value==null)
+            {
+                if(node.ChildNodes.Count!=1) throw new Exception("fail");
+                retstring=node.ChildNodes[0].Value;
+            }else
+                retstring=node.Value;
+
+            return retstring;
+        }
+
+        private static Collection<double> CreateFromCollection_double_node(XmlNode node)
+        {
+            if (node == null) return null;
+            var dst = new Collection<double>();
+
+            for(int i=0; i<node.ChildNodes.Count; i++)
+                dst.Add(Double.Parse(XValue(node.ChildNodes[i]), CultureInfo.InvariantCulture));
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.Component> CreateFromCollection_Component_node(XmlNode node)
+        {
+            var dst = new Collection<tanks.Models.Component>();
+
+            for(int i=0; i<node.ChildNodes.Count; i++)
+                dst.Add(CreateFromComponent_node(node.ChildNodes[i]));
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.CalculationSystem> CreateFromCollection_CalculationSystem_node(XmlNode node)
+        {
+            var dst = new Collection<tanks.Models.CalculationSystem>();
+
+            for(int i=0; i<node.ChildNodes.Count; i++)
+                dst.Add(CreateFromCalculationSystem_node(node.ChildNodes[i]));
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.ModelLink> CreateFromCollection_ModelLink_node(XmlNode node)
+        {
+            var dst = new Collection<tanks.Models.ModelLink>();
+
+            for(int i=0; i<node.ChildNodes.Count; i++)
+            {
+                tanks.Models.ModelLink link;
+
+                switch(node.ChildNodes[i].Name)
+                {
+<#
+    var ass1 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass1.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType != typeof(ModelLink)) continue;
+#>
+                case "<#= tp.Name #>":
+                    link = CreateFrom<#= tp.Name #>_node(node.ChildNodes[i]);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+                dst.Add(link);
+            }
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.ModelObject> CreateFromCollection_ModelObject_node(XmlNode node)
+        {
+            var dst = new Collection<tanks.Models.ModelObject>();
+
+            for(int i=0; i<node.ChildNodes.Count; i++)
+            {
+                tanks.Models.ModelObject obj;
+
+                switch(node.ChildNodes[i].Name)
+                {
+<#
+    var ass2 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass2.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType.BaseType != typeof(ModelObject)) continue;
+#>
+                case "<#= tp.Name #>":
+                    obj = CreateFrom<#= tp.Name #>_node(node.ChildNodes[i]);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+                dst.Add(obj);
+            }
+
+            return dst;
+        }
+
+        private static XmlNode XAttr(XmlNode node,string name)
+        {
+            XmlNode retnode = null;
+            for(int i=0; i<node.ChildNodes.Count; i++)
+            {
+                var split = node.ChildNodes[i].Name.Split('.');
+                if(split.Length!=2)continue;
+                if(split[1] == name)
+                {
+                    retnode=node.ChildNodes[i];
+                    break;
+                }
+            }
+            return retnode;
+        }
+
+        private static string NAttr(XmlNode node,string name,Type type)
+        {
+            string retstring = "";
+            for(int i=0; i<node.Attributes.Count; i++)
+            {
+                if(node.Attributes[i].Name == name)
+                {
+                    retstring = node.Attributes[i].Value;
+                    break;
+                }
+            }
+            if (retstring == "")
+                retstring = Activator.CreateInstance(type).ToString();
+            return retstring;
+        }
+        
+<#
+    var ass = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass.GetTypes())
+    {
+        var attr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (attr == null) continue;
+
+#>
+		private static tanks.Models.<#= tp.Name #> CreateFrom<#= tp.Name #>_node(XmlNode node)
+		{
+			return new tanks.Models.<#= tp.Name #>{
+<#
+        foreach (var py in tp.GetProperties())
+        {
+            var pattr = py.GetCustomAttribute<PropertyTypeAttribute>();
+            if (pattr == null) continue;
+
+            if (py.PropertyType.Name=="Double")
+            {
+#>
+                <#= py.Name #> = Double.Parse(NAttr(node,"<#= py.Name #>",typeof(<#= py.PropertyType #>)), CultureInfo.InvariantCulture),
+<#
+            }
+            else
+            if (py.PropertyType.Name=="String")
+            {
+#>
+                <#= py.Name #> = NAttr(node,"<#= py.Name #>",typeof(<#= py.PropertyType #>)),
+<#
+            }
+            else
+            if (py.PropertyType.IsEnum)
+            {
+#>
+                <#= py.Name #> = (<#= py.PropertyType.Name #>)Enum.Parse(typeof(<#= py.PropertyType.Name #>),
+                NAttr(node,"<#= py.Name #>",typeof(<#= py.PropertyType #>))),
+<#
+            }
+            else
+            {
+                if (py.PropertyType == typeof(Collection<tanks.Models.Component>))
+                {
+#>
+                <#= py.Name #> = CreateFromCollection_Component_node(XAttr(node,"<#= py.Name #>")),
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelObject>))
+                {
+#>
+                <#= py.Name #> = CreateFromCollection_ModelObject_node(XAttr(node,"<#= py.Name #>")),
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelLink>))
+                {
+#>
+                <#= py.Name #> = CreateFromCollection_ModelLink_node(XAttr(node,"<#= py.Name #>")),
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<double>))
+                {
+#>
+                <#= py.Name #> = CreateFromCollection_double_node(XAttr(node,"<#= py.Name #>")),
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<Double[]>))
+                {
+#>
+                <#= py.Name #> = CreateFromCollection_double_array_node(XAttr(node,"<#= py.Name #>")),
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<tanks.Models.CalculationSystem>))
+                {
+#>
+                <#= py.Name #> = CreateFromCollection_CalculationSystem_node(XAttr(node,"<#= py.Name #>")),
+<#
+                }else
+                {
+#>
+                    //throw new Exception("fail");
+<#
+                }
+            }
+        }
+#>
+			};
+		}
+<#
+    }
+#>
+	}
+}

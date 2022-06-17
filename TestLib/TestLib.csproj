@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\tanks.Models.csproj" />
+    <ProjectReference Include="..\Utils\tanks.Utils.csproj" />
+  </ItemGroup>
+
+</Project>

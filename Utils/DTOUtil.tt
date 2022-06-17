@@ -1,0 +1,398 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Reflection.dll" #>
+<#@ assembly name="System.Runtime.dll" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Collections.ObjectModel" #>
+<#@ assembly name="$(ProjectDir)..\Models\bin\$(Configuration)\net462\tanks.Models.dll" #>
+<#@ import namespace="tanks.Models" #>
+<#@ output extension=".cs" #>
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace tanks.Models
+{
+	public static class DTOUtil
+	{
+        public static tanks.Models.FlowDiagram CreateFromFD(tanks.Models.FlowDiagram src, Func<Type,object> getInstance)
+        {
+            return CreateFromFlowDiagram(src, getInstance);
+        }
+
+        public static void UpdateFD(tanks.Models.FlowDiagram dst, tanks.Models.FlowDiagram src)
+        {
+            UpdateFlowDiagram(dst,src);
+        }
+
+        private static void Update_double_array(Double[] dst, Double[] src)
+        {
+            for(int i=0; i<src.Length; i++)
+                dst[i]=src[i];
+        }
+
+        private static void UpdateCollection_double_array(Collection<Double[]> dst, Collection<Double[]> src)
+        {
+            for(int i=0; i<src.Count; i++)
+            Update_double_array(dst[i],src[i]);
+        }
+
+        private static void UpdateCollection_double(Collection<double> dst, Collection<double> src)
+        {
+            for(int i=0; i<src.Count; i++)
+                dst[i]=src[i];
+        }
+
+        private static void UpdateCollection_Component(Collection<tanks.Models.Component> dst, Collection<tanks.Models.Component> src)
+        {
+            for(int i=0; i<src.Count; i++)
+                UpdateComponent(dst[i], src[i]);
+        }
+
+        private static void UpdateCollection_CalculationSystem(Collection<tanks.Models.CalculationSystem> dst, Collection<tanks.Models.CalculationSystem> src)
+        {
+            for(int i=0; i<src.Count; i++)
+                UpdateCalculationSystem(dst[i], src[i]);
+        }
+
+        private static void UpdateCollection_ModelLink(Collection<tanks.Models.ModelLink> dst, Collection<tanks.Models.ModelLink> src)
+        {
+            for(int i=0; i<src.Count; i++)
+            {
+                switch(src[i].GetType().Name)
+                {
+<#
+    var ass3 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass3.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType != typeof(ModelLink)) continue;
+#>
+                case "<#= tp.Name #>":
+                    Update<#= tp.Name #>(dst[i] as tanks.Models.<#= tp.Name #>, src[i] as tanks.Models.<#= tp.Name #>);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+            }
+        }
+
+        private static void UpdateCollection_ModelObject(Collection<tanks.Models.ModelObject> dst, Collection<tanks.Models.ModelObject> src)
+        {
+            for(int i=0; i<src.Count; i++)
+            {
+
+                switch(src[i].GetType().Name)
+                {
+<#
+    var ass4 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass4.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType.BaseType != typeof(ModelObject)) continue;
+#>
+                case "<#= tp.Name #>":
+                    Update<#= tp.Name #>(dst[i] as tanks.Models.<#= tp.Name #>, src[i] as tanks.Models.<#= tp.Name #>);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+            }
+        }
+
+<#
+    var ass5 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass5.GetTypes())
+    {
+        var attr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (attr == null) continue;
+
+#>
+		private static void Update<#= tp.Name #>(tanks.Models.<#= tp.Name #> dst, tanks.Models.<#= tp.Name #> src)
+		{
+<#
+        foreach (var py in tp.GetProperties())
+        {
+            var pattr = py.GetCustomAttribute<PropertyTypeAttribute>();
+            if (pattr == null) continue;
+
+            if ((py.PropertyType.IsEnum) || (py.PropertyType.IsPrimitive) || (py.PropertyType.Name=="String"))
+            {
+#>
+                dst.<#= py.Name #> = src.<#= py.Name #>;
+<#
+            }
+            else
+            {
+                if (py.PropertyType == typeof(Collection<tanks.Models.Component>))
+                {
+#>
+                UpdateCollection_Component(dst.<#= py.Name #>, src.<#= py.Name #>);
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelObject>))
+                {
+#>
+                UpdateCollection_ModelObject(dst.<#= py.Name #>, src.<#= py.Name #>);
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelLink>))
+                {
+#>
+                UpdateCollection_ModelLink(dst.<#= py.Name #>, src.<#= py.Name #>);
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<double>))
+                {
+#>
+                UpdateCollection_double(dst.<#= py.Name #>, src.<#= py.Name #>);
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<Double[]>))
+                {
+#>
+                UpdateCollection_double_array(dst.<#= py.Name #>, src.<#= py.Name #>);
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<tanks.Models.CalculationSystem>))
+                {
+#>
+                UpdateCollection_CalculationSystem(dst.<#= py.Name #>, src.<#= py.Name #>);
+<#
+                }else
+                {
+#>
+                    //throw new Exception("fail");
+<#
+                }
+            }
+        }
+#>
+		}
+<#
+    }
+#>
+
+// ---------------------------------
+    
+        private static Double[] CreateFrom_double_array(Double[] src)
+        {
+            var dst = new Double[src.Length];
+
+            for(int i=0; i<src.Length; i++)
+                dst[i]=src[i];
+
+            return dst;
+        }
+
+        private static Collection<Double[]> CreateFromCollection_double_array(Collection<Double[]> src, Func<Type,object> getInstance)
+        {
+            var dst = new Collection<Double[]>();
+
+            for(int i=0; i<src.Count; i++)
+                dst.Add(CreateFrom_double_array(src[i]));
+
+            return dst;
+        }
+
+        private static Collection<double> CreateFromCollection_double(Collection<double> src, Func<Type,object> getInstance)
+        {
+            var dst = new Collection<double>();
+
+            for(int i=0; i<src.Count; i++)
+                dst.Add(src[i]);
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.Component> CreateFromCollection_Component(Collection<tanks.Models.Component> src, Func<Type,object> getInstance)
+        {
+            var dst = new Collection<tanks.Models.Component>();
+
+            for(int i=0; i<src.Count; i++)
+                dst.Add(CreateFromComponent(src[i], getInstance));
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.CalculationSystem> CreateFromCollection_CalculationSystem(Collection<tanks.Models.CalculationSystem> src, Func<Type,object> getInstance)
+        {
+            var dst = new Collection<tanks.Models.CalculationSystem>();
+
+            for(int i=0; i<src.Count; i++)
+                dst.Add(CreateFromCalculationSystem(src[i], getInstance));
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.ModelLink> CreateFromCollection_ModelLink(Collection<tanks.Models.ModelLink> src, Func<Type,object> getInstance)
+        {
+            var dst = new Collection<tanks.Models.ModelLink>();
+
+            for(int i=0; i<src.Count; i++)
+            {
+                tanks.Models.ModelLink link;
+
+                switch(src[i].GetType().Name)
+                {
+<#
+    var ass1 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass1.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType != typeof(ModelLink)) continue;
+#>
+                case "<#= tp.Name #>":
+                    link = CreateFrom<#= tp.Name #>(src[i] as tanks.Models.<#= tp.Name #>, getInstance);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+                dst.Add(link);
+            }
+
+            return dst;
+        }
+
+        private static Collection<tanks.Models.ModelObject> CreateFromCollection_ModelObject(Collection<tanks.Models.ModelObject> src, Func<Type,object> getInstance)
+        {
+            var dst = new Collection<tanks.Models.ModelObject>();
+
+            for(int i=0; i<src.Count; i++)
+            {
+                tanks.Models.ModelObject obj;
+
+                switch(src[i].GetType().Name)
+                {
+<#
+    var ass2 = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass2.GetTypes())
+    {
+        var tattr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (tattr == null) continue;
+        if (tp.BaseType == null) continue;
+        if (tp.BaseType.BaseType != typeof(ModelObject)) continue;
+#>
+                case "<#= tp.Name #>":
+                    obj = CreateFrom<#= tp.Name #>(src[i] as tanks.Models.<#= tp.Name #>, getInstance);
+                    break;
+<#
+    }
+#>
+                default:
+                        throw new Exception("fail");
+                }
+                dst.Add(obj);
+            }
+
+            return dst;
+        }
+
+<#
+    var ass = typeof(ModelClassAttribute).Assembly;
+
+    foreach (var tp in ass.GetTypes())
+    {
+        var attr = tp.GetCustomAttribute<ModelClassAttribute>();
+        if (attr == null) continue;
+
+#>
+		private static tanks.Models.<#= tp.Name #> CreateFrom<#= tp.Name #>(tanks.Models.<#= tp.Name #> src, Func<Type,object> getInstance)
+		{
+			var obj = getInstance(typeof(tanks.Models.<#= tp.Name #>)) as tanks.Models.<#= tp.Name #>;
+<#
+        foreach (var py in tp.GetProperties())
+        {
+            var pattr = py.GetCustomAttribute<PropertyTypeAttribute>();
+            if (pattr == null) continue;
+
+            if ((py.PropertyType.IsEnum) || (py.PropertyType.IsPrimitive) || (py.PropertyType.Name=="String"))
+            {
+#>
+                obj.<#= py.Name #> = src.<#= py.Name #>;
+<#
+            }
+            else
+            {
+                if (py.PropertyType == typeof(Collection<tanks.Models.Component>))
+                {
+#>
+                obj.<#= py.Name #> = CreateFromCollection_Component(src.<#= py.Name #>, getInstance);
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelObject>))
+                {
+#>
+                obj.<#= py.Name #> = CreateFromCollection_ModelObject(src.<#= py.Name #>, getInstance);
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<tanks.Models.ModelLink>))
+                {
+#>
+                obj.<#= py.Name #> = CreateFromCollection_ModelLink(src.<#= py.Name #>, getInstance);
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<double>))
+                {
+#>
+                obj.<#= py.Name #> = CreateFromCollection_double(src.<#= py.Name #>, getInstance);
+<#
+                }
+                else
+                if (py.PropertyType == typeof(Collection<Double[]>))
+                {
+#>
+                obj.<#= py.Name #> = CreateFromCollection_double_array(src.<#= py.Name #>, getInstance);
+<#
+                }else
+                if (py.PropertyType == typeof(Collection<tanks.Models.CalculationSystem>))
+                {
+#>
+                obj.<#= py.Name #> = CreateFromCollection_CalculationSystem(src.<#= py.Name #>, getInstance);
+<#
+                }else
+                {
+#>
+                    //throw new Exception("fail");
+<#
+                }
+            }
+        }
+#>
+			return obj;
+		}
+<#
+    }
+#>
+	}
+}
