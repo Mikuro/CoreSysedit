@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="tanks.Views.RuntimeDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:tanks.Views"
+             mc:Ignorable="d" 
+             xmlns:h="clr-namespace:ViewHelpers"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DataGrid x:Name="myDataGrid" ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="False"
+                  CanUserResizeRows="False"
+                  CanUserSortColumns="False" AutoGenerateColumns="False"
+                  SelectionMode="Single" SelectionUnit="FullRow" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="From" Binding="{Binding From}" Width="100"/>
+                <DataGridTextColumn Header="To" Binding="{Binding To}" Width="100"/>
+                <DataGridTextColumn Header="P" Binding="{Binding P}" Width="100"/>
+                <DataGridTextColumn Header="F" Binding="{Binding F}" Width="100"/>
+                <DataGridTextColumn Header="T" Binding="{Binding T}" Width="100"/>
+                <DataGridTextColumn Header="H" Binding="{Binding H}" Width="100"/>
+                <DataGridTextColumn Header="ro" Binding="{Binding ro}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <GridSplitter Grid.Row="1" ShowsPreview="False" Height="3"
+        VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+        <Border  Grid.Row="2" Padding="10">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Width="150">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="F" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.F}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="P" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.P}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="T" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.T}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Mw" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.Mw}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="V" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.V}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="RV" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.RV}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="HL" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.HL}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="HV" Width="40"/>
+                        <TextBlock Text="{Binding ElementName=myDataGrid, Path=SelectedItem.HV}"/>
+                    </StackPanel>
+                </StackPanel>
+                <ItemsControl Width="500"
+                    ItemsSource="{Binding ElementName=myDataGrid, Path=SelectedItem.Fractions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" Width="140"/>
+                                <TextBlock Text="{Binding x}" Width="120"/>
+                                <TextBlock Text="{Binding XL}" Width="120"/>
+                                <TextBlock Text="{Binding XV}" Width="120"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

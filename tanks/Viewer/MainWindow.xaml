@@ -1,0 +1,43 @@
+﻿<Window x:Class="tanks.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:tanks"
+        xmlns:views="clr-namespace:tanks.Views"
+        mc:Ignorable="d"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="MainWindow" Height="840" Width="1510">
+    <Window.DataContext>
+        <local:MainWindowVM/>
+    </Window.DataContext>
+    <Grid>
+        <TabControl ItemsSource="{Binding Sheets}">
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ContentControl Focusable="False">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=SheetContentTypeValue}" Value="FlowDiagram">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <views:FlowSheet />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=DocName}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+    </Grid>
+</Window>
